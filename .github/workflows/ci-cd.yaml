@@ -1,9 +1,9 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image (Simple)
 
 on:
   push:
     branches:
-      - main  # Or whichever branches you want to trigger on
+      - main
 
 jobs:
   build-and-push:
@@ -15,16 +15,18 @@ jobs:
         uses: actions/checkout@v3
 
       # Build the Docker image
+      # Replace <YOUR_DOCKERHUB_USERNAME>/<YOUR_REPO_NAME> with your Docker Hub details
       - name: Build Docker image
         run: docker build \
           --file Dockerfile \
           --tag johnvinhac/ai-service:latest \
           .
 
-      # Log in to Docker Hub using GitHub Secrets
+      # Step 3: Log in to Docker Hub
+      # Be sure to set DOCKERHUB_USERNAME and DOCKERHUB_PASSWORD in your GitHub Actions secrets
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      # Push the Docker image to Docker Hub
+      # Step 4: Push the Docker image to Docker Hub
       - name: Push Docker image
-        run: docker push johnvinhac/ai-service:latest
+        run: docker push <YOUR_DOCKERHUB_USERNAME>/<YOUR_REPO_NAME>:latest
