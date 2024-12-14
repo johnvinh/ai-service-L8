@@ -1,29 +1,26 @@
-name: Build and Push Docker Image (Simple)
+name: Build and Push to Docker Hub
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      # Check out the repository
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Build the Docker image
-      # Replace <YOUR_DOCKERHUB_USERNAME>/<YOUR_REPO_NAME> with your Docker Hub details
-      - name: Build Docker image
-        run: docker build -t johnvinhac/ai-service:latest .
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step 3: Log in to Docker Hub
-      # Be sure to set DOCKERHUB_USERNAME and DOCKERHUB_PASSWORD in your GitHub Actions secrets
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-
-      # Step 4: Push the Docker image to Docker Hub
-      - name: Push Docker image
-        run: docker push <YOUR_DOCKERHUB_USERNAME>/<YOUR_REPO_NAME>:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ai-service:latest
