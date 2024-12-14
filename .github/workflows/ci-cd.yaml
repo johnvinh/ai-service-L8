@@ -17,10 +17,7 @@ jobs:
       # Build the Docker image
       # Replace <YOUR_DOCKERHUB_USERNAME>/<YOUR_REPO_NAME> with your Docker Hub details
       - name: Build Docker image
-        run: docker build \
-          --file Dockerfile \
-          --tag johnvinhac/ai-service:latest \
-          .
+        run: docker build -t johnvinhac/ai-service:latest .
 
       # Step 3: Log in to Docker Hub
       # Be sure to set DOCKERHUB_USERNAME and DOCKERHUB_PASSWORD in your GitHub Actions secrets
